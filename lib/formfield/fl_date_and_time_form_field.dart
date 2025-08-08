@@ -21,6 +21,7 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
     Widget? prefixIcon,
     String? helperText,
     bool enabled = true,
+    bool utc = false,
     super.key,
   }) : super(
          builder: (field) {
@@ -57,7 +58,11 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
                                        if (state.value == null) {
                                          state.didChange(value);
                                        } else {
-                                         state.didChange(DateTime(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
+                                         if (utc) {
+                                           state.didChange(DateTime.utc(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
+                                         } else {
+                                           state.didChange(DateTime(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
+                                         }
                                        }
                                      }
                                    });
@@ -79,7 +84,11 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
                                  if (state.value != null) {
                                    showTimePicker(context: state.context, initialTime: TimeOfDay.fromDateTime(state.value!)).then((value) {
                                      if (value != null) {
-                                       state.didChange(DateTime(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
+                                       if (utc) {
+                                         state.didChange(DateTime.utc(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
+                                       } else {
+                                         state.didChange(DateTime(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
+                                       }
                                      }
                                    });
                                  }
@@ -105,6 +114,7 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
          initialValue: initialValue,
          autovalidateMode: autovalidateMode,
        );
+
   @override
   FlDateAndTimeFormFieldState createState() => FlDateAndTimeFormFieldState();
 }
