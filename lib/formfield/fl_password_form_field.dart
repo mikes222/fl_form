@@ -16,13 +16,13 @@ class FlPasswordFormField extends FormField<String> {
     super.key,
     required String label,
     bool isRequired = false,
-    FormFieldValidator<String>? validator,
+    super.validator,
     ValueChanged<String>? onChanged,
-    String? initialValue,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<String>? onSaved,
-    String? restorationId,
-    bool enabled = true,
+    super.initialValue,
+    super.autovalidateMode,
+    super.onSaved,
+    super.restorationId,
+    super.enabled,
     Widget? prefixIcon,
     bool autofocus = false,
     Brightness? keyboardAppearance,
@@ -35,12 +35,6 @@ class FlPasswordFormField extends FormField<String> {
     String? helperText,
     String? placeholderText,
   }) : super(
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
-         restorationId: restorationId,
-         enabled: enabled,
          builder: (field) {
            final state = field as FlPasswordFormFieldState;
 
@@ -73,7 +67,7 @@ class FlPasswordFormField extends FormField<String> {
                    prefixIcon: prefixIcon,
                    suffixIcon: GestureDetector(
                      onTap: () {
-                       state.toglgleShowPass();
+                       state.toggleShowPass();
                      },
                      child: state.obscureText
                          ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
@@ -98,16 +92,22 @@ class FlPasswordFormFieldState extends FormFieldState<String> {
   @override
   FlPasswordFormField get widget => super.widget as FlPasswordFormField;
 
-  void toglgleShowPass() {
+  void toggleShowPass() {
     setState(() {
       obscureText = !obscureText;
     });
   }
 
   @override
-  void didUpdateWidget(covariant FormField<String> oldWidget) {
+  void didUpdateWidget(FlPasswordFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.obscureText != (oldWidget as FlPasswordFormField).obscureText) obscureText = widget.obscureText;
+    if (widget.obscureText != oldWidget.obscureText) obscureText = widget.obscureText;
+    if (widget.initialValue != oldWidget.initialValue) {
+      // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with
+      // a null-value, set the new initial value.
+      setValue(widget.initialValue);
+      textEditingController.text = widget.initialValue ?? '';
+    }
   }
 
   @override
@@ -116,5 +116,17 @@ class FlPasswordFormFieldState extends FormFieldState<String> {
     obscureText = widget.obscureText;
 
     textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
+    textEditingController.addListener(listen);
+    setValue(widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    textEditingController.removeListener(listen);
+    super.dispose();
+  }
+
+  void listen() {
+    setValue(textEditingController.text);
   }
 }

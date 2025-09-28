@@ -6,15 +6,17 @@ import 'package:intl/intl.dart';
 
 import 'fl_form_field_theme.dart';
 
+// todo pattern for date field (dd/mm/yyyy versus yyyy-mm-dd)
 class FlDateFormField extends FormField<DateTime> {
   FlDateFormField({
     DateFormat? dateFormat,
     required DateTime firstDate,
     required DateTime lastDate,
-    FormFieldValidator<DateTime>? validator,
-    FormFieldSetter<DateTime>? onSaved,
-    AutovalidateMode? autovalidateMode,
-    DateTime? initialValue,
+    super.validator,
+    super.onSaved,
+    ValueChanged<DateTime?>? onChanged,
+    super.autovalidateMode,
+    super.initialValue,
     required String label,
     required String? placeholderText,
     bool isRequired = false,
@@ -39,6 +41,9 @@ class FlDateFormField extends FormField<DateTime> {
                          ) {
                            if (value != null) {
                              state.didChange(value);
+                             if (onChanged != null) {
+                               onChanged(value);
+                             }
                            }
                          });
                        }
@@ -65,10 +70,6 @@ class FlDateFormField extends FormField<DateTime> {
              ],
            );
          },
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
        );
   @override
   FlDateFormFieldState createState() => FlDateFormFieldState();

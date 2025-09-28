@@ -18,13 +18,13 @@ class FlTextFormField extends FormField<String> {
     required String label,
     String? placeholderText,
     bool isRequired = false,
-    FormFieldValidator<String>? validator,
+    super.validator,
     ValueChanged<String>? onChanged,
-    String? initialValue,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<String>? onSaved,
-    String? restorationId,
-    bool enabled = true,
+    super.initialValue,
+    super.autovalidateMode,
+    super.onSaved,
+    super.restorationId,
+    super.enabled,
     @Deprecated("Use FlPasswordFormField instead.") this.isPassword = false,
     int minLines = 1,
     int maxLines = 1,
@@ -43,12 +43,6 @@ class FlTextFormField extends FormField<String> {
     ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
   }) : super(
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
-         restorationId: restorationId,
-         enabled: enabled,
          builder: (field) {
            final state = field as FlTextFormFieldState;
 
@@ -87,7 +81,7 @@ class FlTextFormField extends FormField<String> {
                    suffixIcon: isPassword
                        ? GestureDetector(
                            onTap: () {
-                             state.toglgleShowPass();
+                             state.toggleShowPass();
                            },
                            child: state.obscureText
                                ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
@@ -113,7 +107,7 @@ class FlTextFormFieldState extends FormFieldState<String> {
   @override
   FlTextFormField get widget => super.widget as FlTextFormField;
 
-  void toglgleShowPass() {
+  void toggleShowPass() {
     setState(() {
       obscureText = !obscureText;
     });

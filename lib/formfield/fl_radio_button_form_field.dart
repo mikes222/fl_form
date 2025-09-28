@@ -10,22 +10,18 @@ class FlRadioButtonFormField<T> extends FormField<T> {
     super.key,
     required String label,
     bool isRequired = false,
-    FormFieldValidator<T>? validator,
-    T? initialValue,
+    super.validator,
+    super.initialValue,
     required List<T> options,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<T>? onSaved,
-    String? restorationId,
-    bool enabled = true,
+    super.autovalidateMode,
+    super.onSaved,
+    ValueChanged<T?>? onChanged,
+    super.restorationId,
+    super.enabled = true,
     String? helperText,
     String? placeholderText,
+    bool vertical = true,
   }) : super(
-         autovalidateMode: autovalidateMode,
-         enabled: enabled,
-         initialValue: initialValue,
-         onSaved: onSaved,
-         restorationId: restorationId,
-         validator: validator,
          builder: (state) {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,35 +34,74 @@ class FlRadioButtonFormField<T> extends FormField<T> {
                    helperText: helperText,
                    placeholderText: placeholderText,
                  ).create(state.context),
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     ...options.map((e) {
-                       return Row(
-                         children: [
-                           Radio(
-                             value: e,
-                             groupValue: state.value,
-                             onChanged: (value) {
-                               state.didChange(value);
-                             },
-                           ),
-                           const SizedBox(width: 4),
-                           Expanded(
-                             child: Text(
-                               e.toString(),
-                               style: Theme.of(state.context).extension<FlFormFieldTheme>()?.style ?? Theme.of(state.context).textTheme.bodyMedium,
-                             ),
-                           ),
-                         ],
-                       );
-                     }),
-                   ],
+                 child: RadioGroup(
+                   onChanged: (T? value) {
+                     state.didChange(value);
+                     if (onChanged != null) onChanged(value);
+                   },
+                   groupValue: state.value,
+                   child: vertical ? _VerticalWidget(children: _buildChildren(options, state)) : _HorizontalWidget(children: _buildChildren(options, state)),
                  ),
                ),
+
                if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },
        );
+
+  static List<Widget> _buildChildren<T>(List<T> options, FormFieldState<T> state) {
+    return options.map((e) {
+      //   return InkWell(
+      //     onTap: () {
+      //       RadioGroup.maybeOf<T>(state.context)?.onChanged(e);
+      //     },
+      //     child: Row(
+      //       children: [
+      //         Radio(value: e),
+      //         Text(e.toString(), style: Theme.of(state.context).extension<FlFormFieldTheme>()?.style ?? Theme.of(state.context).textTheme.bodyMedium),
+      //       ],
+      //     ),
+      //   );
+      // }).toList();
+
+      // intrinsic width is necessary for horizontal elements
+      return IntrinsicWidth(
+        child: RadioListTile(
+          value: e,
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          title: Text(e.toString(), style: Theme.of(state.context).extension<FlFormFieldTheme>()?.style ?? Theme.of(state.context).textTheme.bodyMedium),
+        ),
+      );
+    }).toList();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+class _VerticalWidget extends StatelessWidget {
+  final List<Widget> children;
+
+  const _VerticalWidget({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: children);
+  }
+}
+//////////////////////////////////////////////////////////////////////////////
+
+class _HorizontalWidget extends StatelessWidget {
+  final List<Widget> children;
+
+  const _HorizontalWidget({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, spacing: 10, children: children),
+    );
+  }
 }
