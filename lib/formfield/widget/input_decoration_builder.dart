@@ -20,6 +20,7 @@ class InputDecorationBuilder {
   InputDecoration create(BuildContext context) {
     return InputDecoration(
       hintText: placeholderText,
+      helperText: helperText,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
@@ -27,10 +28,9 @@ class InputDecorationBuilder {
       focusedBorder: hasError ? Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
       disabledBorder: Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
       border: hasError ? Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-      helperText: helperText,
       fillColor: fillColor(context),
       enabled: enabled,
-    ).applyDefaults(Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(context).inputDecorationTheme);
+    ); //.applyDefaults(Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(context).inputDecorationTheme);
   }
 
   Color? fillColor(BuildContext context) {

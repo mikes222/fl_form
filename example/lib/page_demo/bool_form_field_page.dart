@@ -18,13 +18,8 @@ class _BoolFormFieldPageState extends State<BoolFormFieldPage> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           children: [
-            FlBoolFormField(
-              spacing: 16,
-              title: 'Select All',
-            ),
-            const SizedBox(
-              height: 24,
-            ),
+            FlBoolFormField(label: 'Select All'),
+            const SizedBox(height: 24),
             FlRawBoolFormField(
               title: 'Select All',
               rawBuilder: (context, data, didChange) {
@@ -38,9 +33,7 @@ class _BoolFormFieldPageState extends State<BoolFormFieldPage> {
                           didChange(value);
                         },
                       ),
-                      const Expanded(
-                        child: Text('Select All'),
-                      )
+                      const Expanded(child: Text('Select All')),
                     ],
                   ),
                 );

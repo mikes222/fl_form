@@ -1,10 +1,8 @@
 import 'package:fl_form/formfield/fl_text_form_field.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-import 'fl_form_field_theme.dart';
 import 'widget/default_error_builder.dart';
 
 class FlPasswordFormField extends FormField<String> {
@@ -38,45 +36,28 @@ class FlPasswordFormField extends FormField<String> {
          builder: (field) {
            final state = field as FlPasswordFormFieldState;
 
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               TextField(
-                 controller: state.textEditingController,
-                 cursorWidth: 1,
-                 obscureText: state.obscureText,
-                 enabled: enabled,
-                 autofocus: autofocus,
-                 keyboardAppearance: keyboardAppearance,
-                 textInputAction: textInputAction,
-                 autocorrect: false,
-                 enableSuggestions: false,
-                 onChanged: (value) {
-                   onChanged?.call(value);
-                   state.didChange(value);
-                 },
-                 style: enabled
-                     ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
-                     : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
-                 decoration: InputDecorationBuilder(
-                   enabled: enabled,
-                   hasError: state.hasError,
-                   helperText: helperText,
-                   placeholderText: placeholderText,
-                   prefixIcon: prefixIcon,
-                   suffixIcon: GestureDetector(
-                     onTap: () {
-                       state.toggleShowPass();
-                     },
-                     child: state.obscureText
-                         ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
-                         : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
-                   ),
-                 ).create(field.context),
-               ),
-               if (state.hasError) errorBuilder(state.context, state.errorText!),
-             ],
+           return FlTextfield(
+             textEditingController: state.textEditingController,
+             label: label,
+             placeholderText: placeholderText,
+             isRequired: isRequired,
+             enabled: enabled,
+             obscureText: state.obscureText,
+             hasError: state.hasError,
+             errorText: state.errorText,
+             helperText: helperText,
+             keyboardAppearance: keyboardAppearance,
+             textInputAction: textInputAction,
+             prefixIcon: prefixIcon,
+             suffixIcon: InkWell(
+               onTap: () {
+                 state.toggleShowPass();
+               },
+               child: state.obscureText
+                   ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
+                   : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
+             ),
+             autofocus: autofocus,
            );
          },
        );

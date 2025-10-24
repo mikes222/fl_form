@@ -1,19 +1,23 @@
 import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 
-/// Todo rename to FlSwitchFormField since bool is just the type of the property whereas swich is the ui type (all other form fields are also named according to their ui type)
-class FlBoolFormField extends FormField<bool> {
-  FlBoolFormField({
+/// Checkbox with tristate support
+class FlCheckboxFormField extends FormField<bool?> {
+  FlCheckboxFormField({
     super.key,
+    EdgeInsetsGeometry? padding,
     super.initialValue = false,
-    ValueChanged<bool>? onChanged,
+    double spacing = 0,
+    bool iconAtStart = false,
     required String label,
     super.enabled,
     bool isRequired = false,
     super.autovalidateMode,
     super.onSaved,
+    ValueChanged<bool?>? onChanged,
     super.validator,
     super.restorationId,
+    bool tristate = false,
     String? helperText,
   }) : super(
          builder: (state) {
@@ -27,15 +31,15 @@ class FlBoolFormField extends FormField<bool> {
              //             autofocus: autofocus,
              content: Row(
                children: [
-                 Switch(
-                   padding: EdgeInsets.zero,
-                   value: state.value ?? false,
+                 Checkbox(
+                   value: state.value,
                    onChanged: enabled
                        ? (value) {
-                           state.didChange(value);
                            onChanged?.call(value);
+                           state.didChange(value);
                          }
                        : null,
+                   tristate: tristate,
                  ),
                ],
              ),
