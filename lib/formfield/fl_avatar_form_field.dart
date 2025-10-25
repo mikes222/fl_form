@@ -1,4 +1,4 @@
-import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 
 import 'fl_form_field_theme.dart';
@@ -9,20 +9,18 @@ class FlAvatarFormField extends FormField<FileOrLink> {
     TextStyle? textStyle,
     double radius = 32,
     double borderWidth = 2,
-    FileOrLink? initialValue,
-    FormFieldSetter<FileOrLink>? onSaved,
-    FormFieldValidator<FileOrLink>? validator,
-    bool enabled = true,
-    AutovalidateMode? autovalidateMode,
-    String? restorationId,
+    required String label,
+    String? placeholderText,
+    String? helperText,
+    bool isRequired = false,
+    super.initialValue,
+    super.onSaved,
+    super.validator,
+    super.enabled,
+    super.autovalidateMode,
+    super.restorationId,
     super.key,
   }) : super(
-         initialValue: initialValue,
-         onSaved: onSaved,
-         validator: validator,
-         autovalidateMode: autovalidateMode,
-         enabled: enabled,
-         restorationId: restorationId,
          builder: (state) {
            Color borderColor = state.hasError
                ? Theme.of(state.context).extension<FlFormFieldTheme>()!.inputDecorationTheme.errorBorder!.borderSide.color
@@ -41,32 +39,33 @@ class FlAvatarFormField extends FormField<FileOrLink> {
                child: CircleAvatar(radius: radius, backgroundColor: borderColor, backgroundImage: state.value!.getImage()),
              );
            }
-           return Column(
-             mainAxisSize: MainAxisSize.min,
-             children: [
-               GestureDetector(
-                 onTap: () {
-                   FlRawAvatarFormField.pickFile().then((value) {
-                     if (value != null) {
-                       state.didChange(value);
-                     }
-                   });
-                 },
-                 child: Stack(
-                   alignment: Alignment.center,
-                   children: [
-                     Positioned(child: child),
-                     Positioned.fill(
-                       child: Container(
-                         decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black45),
-                         child: state.hasError ? Icon(Icons.warning, color: borderColor, size: 16) : const Icon(Icons.edit, color: Colors.white, size: 16),
-                       ),
-                     ),
-                   ],
+           return FlReadonlyField(
+             label: label,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             placeholderText: placeholderText,
+             helperText: helperText,
+             errorText: state.errorText,
+             onTap: () {
+               FlRawAvatarFormField.pickFile().then((value) {
+                 if (value != null) {
+                   state.didChange(value);
+                 }
+               });
+             },
+             content: Stack(
+               alignment: Alignment.center,
+               children: [
+                 Positioned(child: child),
+                 Positioned.fill(
+                   child: Container(
+                     decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black45),
+                     child: state.hasError ? Icon(Icons.warning, color: borderColor, size: 16) : const Icon(Icons.edit, color: Colors.white, size: 16),
+                   ),
                  ),
-               ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
-             ],
+               ],
+             ),
            );
          },
        );

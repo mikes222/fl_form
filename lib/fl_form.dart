@@ -9,6 +9,7 @@ export 'package:fl_form/formfield/fl_date_form_field.dart';
 export 'package:fl_form/formfield/fl_date_range_form_field.dart';
 export 'package:fl_form/formfield/fl_duration_form_field.dart';
 export 'package:fl_form/formfield/fl_money_form_field.dart';
+export 'package:fl_form/formfield/fl_multiple_search_item_form_field.dart';
 export 'package:fl_form/formfield/fl_password_form_field.dart';
 export 'package:fl_form/formfield/fl_radio_button_form_field.dart';
 export 'package:fl_form/formfield/fl_search_item_form_field.dart';

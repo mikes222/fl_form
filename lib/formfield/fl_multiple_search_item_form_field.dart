@@ -1,13 +1,12 @@
 import 'package:fl_form/fl_form.dart';
 import 'package:fl_form/formfield/dialog/fl_search_page.dart';
 import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FlSearchItemFormField<T> extends FormField<T> {
+class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
   final OnSearch<T> onSearch;
 
-  FlSearchItemFormField({
+  FlMultipleSearchItemFormField({
     super.key,
     required String label,
     String? placeholderText,
@@ -15,7 +14,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
     FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
     super.validator,
     super.onSaved,
-    ValueChanged<T?>? onChanged,
+    ValueChanged<List<T>?>? onChanged,
     super.autovalidateMode,
     EdgeInsetsGeometry? contentPadding,
     super.enabled,
@@ -25,7 +24,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
     bool isRequired = false,
   }) : super(
          builder: (field) {
-           final state = field as FlSearchItemFormFieldState<T>;
+           final state = field as FlMultipleSearchItemFormFieldState<T>;
            return FlReadonlyField(
              label: label,
              isRequired: isRequired,
@@ -42,43 +41,41 @@ class FlSearchItemFormField<T> extends FormField<T> {
                  ),
                ).then((value) {
                  if (value != null) {
-                   onChanged?.call(value);
-                   state.didChange(value);
+                   List<T> v = state.value ?? [];
+                   v.add(value);
+                   onChanged?.call(v);
+                   state.didChange(v);
                  }
                });
              },
              helperText: helperText,
              errorText: state.errorText,
-             content: state.value == null ? null : builder.buildForContent(state.context, FormFieldOption(value: state.value!)),
-             suffixIcon: field.value != null && !isRequired
-                 ? InkWell(
-                     onTap: enabled
-                         ? () {
-                             onChanged?.call(null);
-                             field.didChange(null);
-                           }
-                         : null,
-                     child: const Icon(CupertinoIcons.clear_circled_solid),
-                   )
-                 : Icon(Icons.search),
+             content: state.value == null || state.value!.isEmpty
+                 ? null
+                 : Wrap(
+                     spacing: 4,
+                     runSpacing: 4,
+                     children: state.value!.map((v) => Chip(label: builder.buildForContent(state.context, FormFieldOption(value: v)))).toList(),
+                   ),
+             suffixIcon: const Icon(Icons.keyboard_arrow_down),
            );
          },
        );
 
   @override
-  FormFieldState<T> createState() {
-    return FlSearchItemFormFieldState<T>();
+  FormFieldState<List<T>> createState() {
+    return FlMultipleSearchItemFormFieldState<T>();
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-class FlSearchItemFormFieldState<T> extends FormFieldState<T> {
+class FlMultipleSearchItemFormFieldState<T> extends FormFieldState<List<T>> {
   @override
-  FlSearchItemFormField<T> get widget => super.widget as FlSearchItemFormField<T>;
+  FlMultipleSearchItemFormField<T> get widget => super.widget as FlMultipleSearchItemFormField<T>;
 
   @override
-  void didUpdateWidget(covariant FormField<T> oldWidget) {
+  void didUpdateWidget(covariant FormField<List<T>> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialValue != oldWidget.initialValue) {
       // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with

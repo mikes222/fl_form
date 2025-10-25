@@ -23,6 +23,7 @@ class FlDateFormField extends FormField<DateTime> {
     super.key,
   }) : super(
          builder: (field) {
+           DateFormat _dateFormat = dateFormat ?? DateFormat('dd/MM/yyyy');
            final state = field as FlDateFormFieldState;
            return FlReadonlyField(
              label: label,
@@ -31,27 +32,25 @@ class FlDateFormField extends FormField<DateTime> {
              hasError: state.hasError,
              errorText: state.errorText,
              helperText: helperText,
-             //             autofocus: autofocus,
-             content: InkWell(
-               onTap: enabled
-                   ? () {
-                       showDatePicker(
-                         context: state.context,
-                         initialDate: state.value ?? DateTime.now(),
-                         firstDate: firstDate ?? DateTime.now().add(Duration(days: -3650)),
-                         lastDate: lastDate ?? DateTime.now().add(Duration(days: 3650)),
-                       ).then((value) {
-                         if (value != null) {
-                           state.didChange(value);
-                           if (onChanged != null) {
-                             onChanged(value);
-                           }
+             onTap: enabled
+                 ? () {
+                     showDatePicker(
+                       context: state.context,
+                       initialDate: state.value ?? DateTime.now(),
+                       firstDate: firstDate ?? DateTime.now().add(Duration(days: -3650)),
+                       lastDate: lastDate ?? DateTime.now().add(Duration(days: 3650)),
+                     ).then((value) {
+                       if (value != null) {
+                         state.didChange(value);
+                         if (onChanged != null) {
+                           onChanged(value);
                          }
-                       });
-                     }
-                   : null,
-               child: Text(state.value == null ? dateFormat?.pattern ?? 'YYYY/MM/DD' : dateFormat!.format(state.value!)),
-             ),
+                       }
+                     });
+                   }
+                 : null,
+             //             autofocus: autofocus,
+             content: Text(state.value == null ? _dateFormat.pattern ?? 'YYYY/MM/DD' : _dateFormat.format(state.value!)),
            );
          },
        );

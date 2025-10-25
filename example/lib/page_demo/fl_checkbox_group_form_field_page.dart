@@ -3,7 +3,7 @@ import 'package:fl_form/fl_form.dart';
 import 'package:flutter/material.dart';
 
 class FlCheckBoxGroupFormFieldPage extends StatefulWidget {
-  const FlCheckBoxGroupFormFieldPage({Key? key}) : super(key: key);
+  const FlCheckBoxGroupFormFieldPage({super.key});
 
   @override
   State<FlCheckBoxGroupFormFieldPage> createState() => _FlCheckBoxGroupFormFieldPageState();

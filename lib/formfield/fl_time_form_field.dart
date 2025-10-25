@@ -25,22 +25,20 @@ class FlTimeFormField extends FormField<TimeOfDay> {
              hasError: state.hasError,
              errorText: state.errorText,
              helperText: helperText,
-             //             autofocus: autofocus,
-             content: InkWell(
-               onTap: enabled
-                   ? () {
-                       showTimePicker(context: state.context, initialTime: state.value ?? TimeOfDay.now()).then((value) {
-                         if (value != null) {
-                           state.didChange(value);
-                           if (onChanged != null) {
-                             onChanged(value);
-                           }
+             onTap: enabled
+                 ? () {
+                     showTimePicker(context: state.context, initialTime: state.value ?? TimeOfDay.now()).then((value) {
+                       if (value != null) {
+                         state.didChange(value);
+                         if (onChanged != null) {
+                           onChanged(value);
                          }
-                       });
-                     }
-                   : null,
-               child: Text(state.value == null ? 'HH:MM' : state.value!.format(state.context)),
-             ),
+                       }
+                     });
+                   }
+                 : null,
+             //             autofocus: autofocus,
+             content: Text(state.value == null ? 'HH:MM' : state.value!.format(state.context)),
            );
          },
        );
