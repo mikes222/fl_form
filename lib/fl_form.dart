@@ -1,7 +1,7 @@
 library fl_form;
 
 export 'package:fl_form/formfield/fl_avatar_form_field.dart';
-export 'package:fl_form/formfield/fl_bool_form_field.dart';
+export 'package:fl_form/formfield/fl_switch_form_field.dart';
 export 'package:fl_form/formfield/fl_checkbox_form_field.dart';
 export 'package:fl_form/formfield/fl_checkbox_group_form_field.dart';
 export 'package:fl_form/formfield/fl_date_and_time_form_field.dart';

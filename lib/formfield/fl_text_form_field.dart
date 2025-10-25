@@ -6,12 +6,32 @@ import 'widget/default_error_builder.dart';
 
 typedef ErrorBuilder = Widget Function(BuildContext context, String errorText);
 
+/// A customizable text form field widget that provides a seamless and
+/// consistent look and feel for your forms.
+///
+/// The [FlTextFormField] is a versatile widget that can be used for various
+/// types of text input, including single-line, multi-line, and password fields.
+/// It integrates with Flutter's [Form] widget and provides built-in validation
+/// and error handling.
 class FlTextFormField extends FormField<String> {
   @Deprecated("Use FlPasswordFormField instead.")
   final bool isPassword;
   final TextEditingController? textEditingController;
   final ValueChanged<String?>? onChanged;
 
+  /// Creates a new instance of [FlTextFormField].
+  ///
+  /// The [label] parameter is required and is used to display a label above the
+  /// text field.
+  ///
+  /// The [placeholderText] is an optional hint to be displayed when the field is
+  /// empty.
+  ///
+  /// The [isRequired] flag indicates whether the field must be filled.
+  ///
+  /// The [validator] function is used for custom validation.
+  ///
+  /// The [onChanged] callback is triggered when the field's value changes.
   FlTextFormField({
     super.key,
     required String label,

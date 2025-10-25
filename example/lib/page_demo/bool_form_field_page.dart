@@ -1,9 +1,9 @@
-import 'package:fl_form/formfield/fl_bool_form_field.dart';
 import 'package:fl_form/formfield/fl_raw_bool_form_field.dart';
+import 'package:fl_form/formfield/fl_switch_form_field.dart';
 import 'package:flutter/material.dart';
 
 class BoolFormFieldPage extends StatefulWidget {
-  const BoolFormFieldPage({Key? key}) : super(key: key);
+  const BoolFormFieldPage({super.key});
 
   @override
   State<BoolFormFieldPage> createState() => _BoolFormFieldPageState();
@@ -18,7 +18,7 @@ class _BoolFormFieldPageState extends State<BoolFormFieldPage> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           children: [
-            FlBoolFormField(label: 'Select All'),
+            FlSwitchFormField(label: 'Select All'),
             const SizedBox(height: 24),
             FlRawBoolFormField(
               title: 'Select All',

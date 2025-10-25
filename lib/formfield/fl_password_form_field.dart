@@ -5,11 +5,25 @@ import 'package:tuple/tuple.dart';
 
 import 'widget/default_error_builder.dart';
 
+/// A specialized text form field for entering passwords.
+///
+/// The [FlPasswordFormField] obscures the entered text and provides an icon to
+/// toggle text visibility. It is designed to be used within a [Form] and
+/// supports validation and error handling.
 class FlPasswordFormField extends FormField<String> {
   final TextEditingController? textEditingController;
 
   final bool obscureText;
 
+  /// Creates a new instance of [FlPasswordFormField].
+  ///
+  /// The [label] is a required string that describes the input field.
+  ///
+  /// The [isRequired] flag indicates whether the field must be filled.
+  ///
+  /// The [validator] function allows for custom validation logic.
+  ///
+  /// The [onChanged] callback is invoked when the value of the field changes.
   FlPasswordFormField({
     super.key,
     required String label,

@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // todo pattern for date field (dd/mm/yyyy versus yyyy-mm-dd)
+/// A form field for selecting a date.
+///
+/// The [FlDateFormField] displays a read-only field that, when tapped, opens a
+/// date picker dialog. It is designed to be used within a [Form] and supports
+/// validation and error handling.
 class FlDateFormField extends FormField<DateTime> {
+  /// Creates a new instance of [FlDateFormField].
+  ///
+  /// The [label] is a required string that describes the date field.
+  /// The [dateFormat] allows for custom date formatting.
+  /// The [firstDate] and [lastDate] define the selectable date range.
   FlDateFormField({
     DateFormat? dateFormat,
     DateTime? firstDate,

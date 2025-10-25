@@ -1,9 +1,18 @@
 import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 
-/// Todo rename to FlSwitchFormField since bool is just the type of the property whereas swich is the ui type (all other form fields are also named according to their ui type)
-class FlBoolFormField extends FormField<bool> {
-  FlBoolFormField({
+/// A form field that displays a switch to toggle a boolean value.
+///
+/// The [FlSwitchFormField] is a simple and effective way to get a true/false
+/// input from the user. It is designed to be used within a [Form] and supports
+/// validation and error handling.
+class FlSwitchFormField extends FormField<bool> {
+  /// Creates a new instance of [FlSwitchFormField].
+  ///
+  /// The [label] is a required string that describes the switch field.
+  /// The [initialValue] sets the initial state of the switch.
+  /// The [onChanged] callback is triggered when the switch is toggled.
+  FlSwitchFormField({
     super.key,
     super.initialValue = false,
     ValueChanged<bool>? onChanged,

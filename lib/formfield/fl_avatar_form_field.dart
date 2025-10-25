@@ -4,7 +4,21 @@ import 'package:flutter/material.dart';
 import 'fl_form_field_theme.dart';
 import 'fl_raw_avatar_form_field.dart';
 
+/// A form field for selecting and displaying an avatar from a file or network URL.
+///
+/// The [FlAvatarFormField] is a circular avatar widget that allows users to pick an
+/// image from their gallery. It displays the selected image as a circular avatar
+/// and provides an edit icon to change the selection.
+///
+/// This widget is designed to be used within a [Form] and supports validation
+/// and error handling.
 class FlAvatarFormField extends FormField<FileOrLink> {
+  /// Creates a new instance of [FlAvatarFormField].
+  ///
+  /// The [label] is a required string that describes the avatar field.
+  /// The [radius] determines the size of the circular avatar.
+  /// The [borderWidth] sets the width of the border around the avatar.
+  /// The [isRequired] flag indicates whether an avatar must be selected.
   FlAvatarFormField({
     TextStyle? textStyle,
     double radius = 32,
