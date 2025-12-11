@@ -96,6 +96,7 @@ class FlTextfield extends StatelessWidget {
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         hintText: placeholderText,
+        helperMaxLines: 2,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         label: LabelWidget(label: label, isRequired: isRequired),
       ),

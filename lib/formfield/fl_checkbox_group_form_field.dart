@@ -32,6 +32,7 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                  return Row(
                    children: [
                      Checkbox(
+                       key: e.label != null ? Key(e.label!) : null,
                        value: state.value?.contains(e.value) == true,
                        onChanged: (value) {
                          if (value == true) {

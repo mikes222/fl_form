@@ -30,19 +30,22 @@ class FlSegmentedButtonFormField<T> extends FormField<Set<T>> {
              placeholderText: placeholderText,
              helperText: helperText,
              errorText: state.errorText,
-             content: SegmentedButton<T>(
-               emptySelectionAllowed: !isRequired,
-               multiSelectionEnabled: multiSelectionEnabled,
-               segments: options
-                   .map((toElement) => ButtonSegment<T>(label: builder.buildForContent(state.context, toElement), value: toElement.value))
-                   .toList(),
-               selected: state.value ?? {},
-               onSelectionChanged: enabled
-                   ? (value) {
-                       state.didChange(value);
-                       onChanged?.call(value);
-                     }
-                   : null,
+             content: SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: SegmentedButton<T>(
+                 emptySelectionAllowed: !isRequired,
+                 multiSelectionEnabled: multiSelectionEnabled,
+                 segments: options
+                     .map((toElement) => ButtonSegment<T>(label: builder.buildForContent(state.context, toElement), value: toElement.value))
+                     .toList(),
+                 selected: state.value ?? {},
+                 onSelectionChanged: enabled
+                     ? (value) {
+                         state.didChange(value);
+                         onChanged?.call(value);
+                       }
+                     : null,
+               ),
              ),
            );
          },

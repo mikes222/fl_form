@@ -72,6 +72,7 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 2),
                         child: TextField(
+                          key: Key("search_field"),
                           cursorWidth: 1,
                           onChanged: (value) {
                             _searchStream.sink.add(value);

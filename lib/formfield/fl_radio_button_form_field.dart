@@ -53,7 +53,7 @@ class FlRadioButtonFormField<T> extends FormField<T> {
             : null,
         child: Row(
           children: [
-            Radio<T>(value: e.value, enabled: enabled),
+            Radio<T>(key: e.label != null ? Key(e.label!) : null, value: e.value, enabled: enabled),
             builder.buildForContent(context, e),
           ],
         ),

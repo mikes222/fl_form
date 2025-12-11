@@ -15,6 +15,7 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
     super.validator,
     super.onSaved,
     ValueChanged<List<T>?>? onChanged,
+    ValueChanged<T>? onDelete,
     super.autovalidateMode,
     EdgeInsetsGeometry? contentPadding,
     super.enabled,
@@ -31,23 +32,25 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
              enabled: enabled,
              hasError: state.hasError,
              placeholderText: placeholderText,
-             onTap: () {
-               Navigator.push<T>(
-                 state.context,
-                 _MaterialTransparentRoute(
-                   builder: (context) {
-                     return FlSearchPage<T>(builder: builder, onSearch: onSearch);
-                   },
-                 ),
-               ).then((value) {
-                 if (value != null) {
-                   List<T> v = state.value ?? [];
-                   v.add(value);
-                   onChanged?.call(v);
-                   state.didChange(v);
-                 }
-               });
-             },
+             onTap: enabled
+                 ? () {
+                     Navigator.push<T>(
+                       state.context,
+                       _MaterialTransparentRoute(
+                         builder: (context) {
+                           return FlSearchPage<T>(builder: builder, onSearch: onSearch);
+                         },
+                       ),
+                     ).then((value) {
+                       if (value != null) {
+                         List<T> v = state.value ?? [];
+                         v.add(value);
+                         onChanged?.call(v);
+                         state.didChange(v);
+                       }
+                     });
+                   }
+                 : null,
              helperText: helperText,
              errorText: state.errorText,
              content: state.value == null || state.value!.isEmpty
@@ -55,7 +58,18 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
                  : Wrap(
                      spacing: 4,
                      runSpacing: 4,
-                     children: state.value!.map((v) => Chip(label: builder.buildForContent(state.context, FormFieldOption(value: v)))).toList(),
+                     children: state.value!
+                         .map(
+                           (v) => Chip(
+                             onDeleted: onDelete != null
+                                 ? () {
+                                     onDelete(v);
+                                   }
+                                 : null,
+                             label: builder.buildForContent(state.context, FormFieldOption(value: v)),
+                           ),
+                         )
+                         .toList(),
                    ),
              suffixIcon: const Icon(Icons.keyboard_arrow_down),
            );

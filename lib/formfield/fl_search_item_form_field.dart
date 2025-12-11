@@ -32,21 +32,23 @@ class FlSearchItemFormField<T> extends FormField<T> {
              enabled: enabled,
              hasError: state.hasError,
              placeholderText: placeholderText,
-             onTap: () {
-               Navigator.push<T>(
-                 state.context,
-                 _MaterialTransparentRoute(
-                   builder: (context) {
-                     return FlSearchPage<T>(builder: builder, onSearch: onSearch);
-                   },
-                 ),
-               ).then((value) {
-                 if (value != null) {
-                   onChanged?.call(value);
-                   state.didChange(value);
-                 }
-               });
-             },
+             onTap: enabled
+                 ? () {
+                     Navigator.push<T>(
+                       state.context,
+                       _MaterialTransparentRoute(
+                         builder: (context) {
+                           return FlSearchPage<T>(builder: builder, onSearch: onSearch);
+                         },
+                       ),
+                     ).then((value) {
+                       if (value != null) {
+                         onChanged?.call(value);
+                         state.didChange(value);
+                       }
+                     });
+                   }
+                 : null,
              helperText: helperText,
              errorText: state.errorText,
              content: state.value == null ? null : builder.buildForContent(state.context, FormFieldOption(value: state.value!)),

@@ -13,6 +13,7 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
     super.validator,
     super.onSaved,
     ValueChanged<List<T>>? onChanged,
+    ValueChanged<T>? onDelete,
     super.autovalidateMode,
     super.enabled,
     super.initialValue,
@@ -46,7 +47,16 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
                      spacing: 4,
                      runSpacing: 4,
                      children: state.value!
-                         .map((v) => Chip(label: builder.buildForContent(state.context, options.firstWhere((test) => test.value == v))))
+                         .map(
+                           (v) => Chip(
+                             onDeleted: onDelete != null
+                                 ? () {
+                                     onDelete(v);
+                                   }
+                                 : null,
+                             label: builder.buildForContent(state.context, options.firstWhere((test) => test.value == v)),
+                           ),
+                         )
                          .toList(),
                    ),
              suffixIcon: const Icon(Icons.keyboard_arrow_down),

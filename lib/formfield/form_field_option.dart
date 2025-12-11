@@ -5,7 +5,7 @@ class FormFieldOption<T> {
 
   final String? label;
 
-  final IconData? icon;
+  final Widget? icon;
 
   final Object? additionalData;
 
@@ -14,10 +14,10 @@ class FormFieldOption<T> {
 
 //////////////////////////////////////////////////////////////////////////////
 
-abstract class FormFieldWidgetBuilder {
-  Widget buildForContent(BuildContext context, FormFieldOption formFieldOption);
+abstract class FormFieldWidgetBuilder<T> {
+  Widget buildForContent(BuildContext context, FormFieldOption<T> formFieldOption);
 
-  Widget buildForList(BuildContext context, FormFieldOption formFieldOption, bool isSelected);
+  Widget buildForList(BuildContext context, FormFieldOption<T> formFieldOption, bool isSelected);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ class DefaultFormFieldWidgetBuilder implements FormFieldWidgetBuilder {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (formFieldOption.icon != null) Icon(formFieldOption.icon),
+        if (formFieldOption.icon != null) formFieldOption.icon!,
         if (formFieldOption.icon != null) SizedBox(width: (Theme.of(context).textTheme.bodyLarge?.fontSize ?? 0) / 2),
         Text(formFieldOption.label ?? formFieldOption.value.toString()),
       ],
@@ -41,7 +41,7 @@ class DefaultFormFieldWidgetBuilder implements FormFieldWidgetBuilder {
   Widget buildForList(BuildContext context, FormFieldOption formFieldOption, bool isSelected) {
     return Row(
       children: [
-        if (formFieldOption.icon != null) Icon(formFieldOption.icon, color: Theme.of(context).iconTheme.color),
+        if (formFieldOption.icon != null) formFieldOption.icon!,
         if (formFieldOption.icon != null) SizedBox(width: Theme.of(context).textTheme.bodyLarge?.fontSize),
         Text(formFieldOption.label ?? formFieldOption.value.toString(), style: Theme.of(context).textTheme.bodyLarge),
         const Spacer(),
