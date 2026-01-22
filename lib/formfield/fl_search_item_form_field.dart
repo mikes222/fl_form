@@ -13,6 +13,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
     String? placeholderText,
     Widget? prefixIcon,
     FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    WidgetBuilder? loadingBuilder,
     super.validator,
     super.onSaved,
     ValueChanged<T?>? onChanged,
@@ -38,7 +39,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
                        state.context,
                        _MaterialTransparentRoute(
                          builder: (context) {
-                           return FlSearchPage<T>(builder: builder, onSearch: onSearch);
+                           return FlSearchPage<T>(builder: builder, onSearch: onSearch, loadingBuilder: loadingBuilder);
                          },
                        ),
                      ).then((value) {

@@ -30,11 +30,23 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
 
   late final Stream<List<T>> _searchResults;
 
+  bool _loading = false;
+
   @override
   void initState() {
     super.initState();
     _searchResults = _searchStream.stream.debounce(const Duration(milliseconds: 700)).asyncMap((String event) async {
+      if (mounted) {
+        setState(() {
+          _loading = true;
+        });
+      }
       List<T> results = await widget.onSearch(event);
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
       return results;
     });
   }
@@ -42,6 +54,7 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // let the background shine through
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -107,31 +120,32 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
             ),
           ),
         ),
-        body: StreamBuilder(
-          stream: _searchResults,
-          builder: (BuildContext context, AsyncSnapshot<List<T>> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.requireData.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.pop(context, snapshot.requireData[index]);
+        body: Stack(
+          children: [
+            StreamBuilder(
+              stream: _searchResults,
+              builder: (BuildContext context, AsyncSnapshot<List<T>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.requireData.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pop(context, snapshot.requireData[index]);
+                        },
+                        child: widget.builder.buildForList(context, FormFieldOption(value: snapshot.requireData[index]!), false),
+                      );
                     },
-                    child: widget.builder.buildForList(context, FormFieldOption(value: snapshot.requireData[index]!), false),
                   );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return defaultErrorBuilder(context, snapshot.error.toString());
-            } else {
-              if (widget.loadingBuilder != null) {
-                return widget.loadingBuilder!(context);
-              } else {
-                return Container();
-              }
-            }
-          },
+                } else if (snapshot.hasError) {
+                  return defaultErrorBuilder(context, snapshot.error.toString());
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            if (widget.loadingBuilder != null && _loading) Center(child: widget.loadingBuilder!(context)),
+          ],
         ),
       ),
     );
