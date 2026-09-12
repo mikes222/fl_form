@@ -16,8 +16,9 @@ class SingleItemPickerFormField<T> extends FormField<T> {
     super.enabled,
     super.initialValue,
     bool isRequired = false,
-    required List<FormFieldOption<T>> options,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    required Iterable<T> options,
+    FlContentBuilder<T>? contentBuilder,
+    FlListBuilder<T>? listBuilder,
     String? helperText,
   }) : super(
          builder: (field) {
@@ -30,7 +31,7 @@ class SingleItemPickerFormField<T> extends FormField<T> {
              placeholderText: placeholderText,
              onTap: enabled
                  ? () {
-                     SingleItemPickerBottomSheet.show<T>(state.context, options, state.value, builder).then((value) {
+                     SingleItemPickerBottomSheet.show<T>(state.context, options.toList(), state.value, listBuilder).then((value) {
                        if (value != null) {
                          onChanged?.call(value);
                          state.didChange(value);
@@ -40,7 +41,7 @@ class SingleItemPickerFormField<T> extends FormField<T> {
                  : null,
              helperText: helperText,
              errorText: state.errorText,
-             content: state.value == null ? null : builder.buildForContent(state.context, options.firstWhere((test) => test.value == state.value)),
+             content: contentBuilder != null ? contentBuilder(state.context, state.value) : defaultFlContentBuilder<T>(state.context, state.value),
              suffixIcon: const Icon(Icons.keyboard_arrow_down),
            );
          },

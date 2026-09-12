@@ -9,46 +9,52 @@ import '../fl_form_field_theme.dart';
 
 typedef OnSearch<T> = Future<List<T>> Function(String keyword);
 
-class FlSearchPage<T> extends StatefulWidget {
+class FlSearchDialog<T> extends StatefulWidget {
   final OnSearch<T> onSearch;
-  final FormFieldWidgetBuilder builder;
+  final FlListBuilder<T>? listBuilder;
   final WidgetBuilder? loadingBuilder;
   final ErrorWidgetBuilder? errorWidgetBuilder;
   final String? searchPlaceholder;
-  const FlSearchPage({super.key, required this.onSearch, required this.builder, this.errorWidgetBuilder, this.loadingBuilder, this.searchPlaceholder});
+  const FlSearchDialog({super.key, required this.onSearch, this.listBuilder, this.errorWidgetBuilder, this.loadingBuilder, this.searchPlaceholder});
 
   @override
-  State<FlSearchPage<T>> createState() => _FlSearchPageState<T>();
+  State<FlSearchDialog<T>> createState() => _FlSearchDialogState<T>();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
+class _FlSearchDialogState<T> extends State<FlSearchDialog<T>> {
   final TextEditingController controller = TextEditingController();
 
   final StreamController<String> _searchStream = StreamController.broadcast();
 
-  late final Stream<List<T>> _searchResults;
+  late final Stream<_SearchResult<T>> _searchResults;
 
-  bool _loading = false;
+  _SearchResult<T> _lastResult = _SearchResult();
+
+  bool _initial = false;
 
   @override
   void initState() {
     super.initState();
-    _searchResults = _searchStream.stream.debounce(const Duration(milliseconds: 700)).asyncMap((String event) async {
-      if (mounted) {
-        setState(() {
-          _loading = true;
-        });
-      }
-      List<T> results = await widget.onSearch(event);
-      if (mounted) {
-        setState(() {
-          _loading = false;
-        });
-      }
-      return results;
-    });
+    _searchResults = _searchStream.stream.debounce(const Duration(milliseconds: 700)).switchMap(_performSearch);
+  }
+
+  Stream<_SearchResult<T>> _performSearch(String keyword) async* {
+    yield _SearchResult(loading: true);
+    try {
+      final List<T> results = await widget.onSearch(keyword);
+      yield _SearchResult(result: results);
+    } catch (error, stackTrace) {
+      yield _SearchResult(error: error, stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchStream.close();
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,34 +126,59 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
             ),
           ),
         ),
-        body: Stack(
-          children: [
-            StreamBuilder(
-              stream: _searchResults,
-              builder: (BuildContext context, AsyncSnapshot<List<T>> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.requireData.length,
+        body: StreamBuilder<_SearchResult<T>>(
+          stream: _searchResults,
+          builder: (BuildContext context, AsyncSnapshot<_SearchResult<T>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              if (!_initial) {
+                _searchStream.sink.add('');
+                _initial = true;
+              }
+            }
+            final result = snapshot.data;
+            if (result != null && !result.loading) {
+              _lastResult = result;
+            }
+            final items = _lastResult.result;
+            final error = result?.error;
+            return Stack(
+              children: [
+                if (items.isNotEmpty)
+                  ListView.builder(
+                    itemCount: items.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          Navigator.pop(context, snapshot.requireData[index]);
+                          Navigator.pop(context, items[index]);
                         },
-                        child: widget.builder.buildForList(context, FormFieldOption(value: snapshot.requireData[index]!), false),
+                        child: widget.listBuilder != null
+                            ? widget.listBuilder!(context, items[index], false)
+                            : defaultFlListBuilder(context, items[index], false),
                       );
                     },
-                  );
-                } else if (snapshot.hasError) {
-                  return defaultErrorBuilder(context, snapshot.error.toString());
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            if (widget.loadingBuilder != null && _loading) Center(child: widget.loadingBuilder!(context)),
-          ],
+                  ),
+                if (widget.loadingBuilder != null && (result?.loading ?? false)) Center(child: widget.loadingBuilder!(context)),
+                if (error != null)
+                  widget.errorWidgetBuilder != null
+                      ? widget.errorWidgetBuilder!(FlutterErrorDetails(exception: error, stack: result?.stackTrace))
+                      : defaultErrorBuilder(context, error.toString()),
+              ],
+            );
+          },
         ),
       ),
     );
   }
+}
+
+class _SearchResult<T> {
+  final List<T> result;
+
+  final bool loading;
+
+  final Object? error;
+
+  final StackTrace? stackTrace;
+
+  _SearchResult({this.result = const [], this.loading = false, this.error, this.stackTrace});
 }

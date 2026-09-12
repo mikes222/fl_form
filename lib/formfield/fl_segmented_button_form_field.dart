@@ -9,8 +9,8 @@ class FlSegmentedButtonFormField<T> extends FormField<Set<T>> {
     bool isRequired = false,
     super.validator,
     super.initialValue,
-    required List<FormFieldOption<T>> options,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    required List<T> options,
+    FlContentBuilder<T>? contentBuilder,
     super.autovalidateMode,
     super.onSaved,
     ValueChanged<Set<T>>? onChanged,
@@ -36,7 +36,12 @@ class FlSegmentedButtonFormField<T> extends FormField<Set<T>> {
                  emptySelectionAllowed: !isRequired,
                  multiSelectionEnabled: multiSelectionEnabled,
                  segments: options
-                     .map((toElement) => ButtonSegment<T>(label: builder.buildForContent(state.context, toElement), value: toElement.value))
+                     .map(
+                       (toElement) => ButtonSegment<T>(
+                         label: contentBuilder != null ? contentBuilder(state.context, toElement) : defaultFlContentBuilder<T>(state.context, toElement),
+                         value: toElement,
+                       ),
+                     )
                      .toList(),
                  selected: state.value ?? {},
                  onSelectionChanged: enabled

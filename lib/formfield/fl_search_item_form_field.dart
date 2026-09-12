@@ -1,5 +1,5 @@
 import 'package:fl_form/fl_form.dart';
-import 'package:fl_form/formfield/dialog/fl_search_page.dart';
+import 'package:fl_form/formfield/dialog/fl_search_dialog.dart';
 import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +12,10 @@ class FlSearchItemFormField<T> extends FormField<T> {
     required String label,
     String? placeholderText,
     Widget? prefixIcon,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    FlContentBuilder<T>? contentBuilder,
+    FlListBuilder<T>? listBuilder,
     WidgetBuilder? loadingBuilder,
+    ErrorWidgetBuilder? errorWidgetBuilder,
     super.validator,
     super.onSaved,
     ValueChanged<T?>? onChanged,
@@ -39,7 +41,12 @@ class FlSearchItemFormField<T> extends FormField<T> {
                        state.context,
                        _MaterialTransparentRoute(
                          builder: (context) {
-                           return FlSearchPage<T>(builder: builder, onSearch: onSearch, loadingBuilder: loadingBuilder);
+                           return FlSearchDialog<T>(
+                             listBuilder: listBuilder,
+                             onSearch: onSearch,
+                             loadingBuilder: loadingBuilder,
+                             errorWidgetBuilder: errorWidgetBuilder,
+                           );
                          },
                        ),
                      ).then((value) {
@@ -52,7 +59,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
                  : null,
              helperText: helperText,
              errorText: state.errorText,
-             content: state.value == null ? null : builder.buildForContent(state.context, FormFieldOption(value: state.value!)),
+             content: contentBuilder != null ? contentBuilder(state.context, state.value) : defaultFlContentBuilder<T>(state.context, state.value),
              suffixIcon: field.value != null && !isRequired
                  ? InkWell(
                      onTap: enabled

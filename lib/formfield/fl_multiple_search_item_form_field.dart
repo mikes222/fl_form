@@ -1,5 +1,5 @@
 import 'package:fl_form/fl_form.dart';
-import 'package:fl_form/formfield/dialog/fl_search_page.dart';
+import 'package:fl_form/formfield/dialog/fl_search_dialog.dart';
 import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +11,8 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
     required String label,
     String? placeholderText,
     Widget? prefixIcon,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    FlContentBuilder<T>? contentBuilder,
+    FlListBuilder<T>? listBuilder,
     super.validator,
     super.onSaved,
     ValueChanged<List<T>?>? onChanged,
@@ -38,7 +39,7 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
                        state.context,
                        _MaterialTransparentRoute(
                          builder: (context) {
-                           return FlSearchPage<T>(builder: builder, onSearch: onSearch);
+                           return FlSearchDialog<T>(listBuilder: listBuilder, onSearch: onSearch);
                          },
                        ),
                      ).then((value) {
@@ -66,7 +67,7 @@ class FlMultipleSearchItemFormField<T> extends FormField<List<T>> {
                                      onDelete(v);
                                    }
                                  : null,
-                             label: builder.buildForContent(state.context, FormFieldOption(value: v)),
+                             label: contentBuilder != null ? contentBuilder(state.context, v) : defaultFlContentBuilder(state.context, v),
                            ),
                          )
                          .toList(),

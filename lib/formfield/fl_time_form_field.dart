@@ -54,4 +54,12 @@ class FlTimeFormFieldState extends FormFieldState<TimeOfDay> {
       isFocused = newValue;
     });
   }
+
+  @override
+  void didUpdateWidget(covariant FormField<TimeOfDay> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      setValue(widget.initialValue);
+    }
+  }
 }

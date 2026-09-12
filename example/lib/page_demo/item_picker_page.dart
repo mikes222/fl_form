@@ -23,35 +23,17 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                 SingleItemPickerFormField<Object>(
                   label: 'Select Item',
                   placeholderText: 'Select Item',
-                  options: [
-                    FormFieldOption(value: 'Afghanistan'),
-                    FormFieldOption(value: 'Aland Islands'),
-                    FormFieldOption(value: 'Albania'),
-                    FormFieldOption(value: 'Algeria'),
-                    FormFieldOption(value: 'American Samoa'),
-                    FormFieldOption(value: 'Andorra'),
-                    FormFieldOption(value: 'Angola'),
-                    FormFieldOption(value: 'Anguilla'),
-                  ],
+                  options: ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla'],
                 ),
                 SingleItemPickerFormField<Object>(
                   label: 'Select Item customize',
                   placeholderText: 'Select Item',
-                  options: [
-                    FormFieldOption(value: 'Afghanistan'),
-                    FormFieldOption(value: 'Aland Islands'),
-                    FormFieldOption(value: 'Albania'),
-                    FormFieldOption(value: 'Algeria'),
-                    FormFieldOption(value: 'American Samoa'),
-                    FormFieldOption(value: 'Andorra'),
-                    FormFieldOption(value: 'Angola'),
-                    FormFieldOption(value: 'Anguilla'),
-                  ],
+                  options: ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla'],
                 ),
                 SingleItemPickerFormField(
                   label: 'Select Item customize',
                   placeholderText: 'Select Item',
-                  builder: SimpleFormFieldWidgetBuilder(),
+                  //builder: SimpleFormFieldWidgetBuilder(),
                   options: [
                     SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),
                     SimpleData(title: 'Title 2', subTitle: 'Sub title 2'),
@@ -76,16 +58,7 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                   validator: (value) {
                     return 'Data Invalid';
                   },
-                  options: [
-                    FormFieldOption(value: 'Afghanistan'),
-                    FormFieldOption(value: 'Aland Islands'),
-                    FormFieldOption(value: 'Albania'),
-                    FormFieldOption(value: 'Algeria'),
-                    FormFieldOption(value: 'American Samoa'),
-                    FormFieldOption(value: 'Andorra'),
-                    FormFieldOption(value: 'Angola'),
-                    FormFieldOption(value: 'Anguilla'),
-                  ],
+                  options: ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla'],
                 ),
                 SingleItemPickerFormField<Object>(
                   label: 'Select Item customize',
@@ -94,22 +67,13 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                   validator: (value) {
                     return 'Data Invalid';
                   },
-                  options: [
-                    FormFieldOption(value: 'Afghanistan'),
-                    FormFieldOption(value: 'Aland Islands'),
-                    FormFieldOption(value: 'Albania'),
-                    FormFieldOption(value: 'Algeria'),
-                    FormFieldOption(value: 'American Samoa'),
-                    FormFieldOption(value: 'Andorra'),
-                    FormFieldOption(value: 'Angola'),
-                    FormFieldOption(value: 'Anguilla'),
-                  ],
+                  options: ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla'],
                 ),
                 SingleItemPickerFormField(
                   label: 'Select Item customize',
                   placeholderText: 'Select Item',
                   autovalidateMode: AutovalidateMode.always,
-                  builder: SimpleFormFieldWidgetBuilder(),
+                  //builder: SimpleFormFieldWidgetBuilder(),
                   validator: (value) {
                     return 'Data Invalid';
                   },
@@ -135,58 +99,58 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SimpleData extends FormFieldOption {
+class SimpleData {
   final String subTitle;
 
-  SimpleData({required String title, required this.subTitle}) : super(value: title, label: title);
+  SimpleData({required String title, required this.subTitle});
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SimpleFormFieldWidgetBuilder implements FormFieldWidgetBuilder {
-  @override
-  Widget buildForContent(BuildContext context, FormFieldOption formFieldOption) {
-    SimpleData simpleData = formFieldOption as SimpleData;
-    return Row(
-      children: [
-        const CircleAvatar(radius: 16),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(simpleData.label!, style: Theme.of(context).textTheme.bodyMedium),
-              const SizedBox(height: 2),
-              Text(simpleData.subTitle, style: Theme.of(context).textTheme.labelMedium),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget buildForList(BuildContext context, FormFieldOption formFieldOption, bool isSelected) {
-    SimpleData simpleData = formFieldOption as SimpleData;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        children: [
-          const CircleAvatar(radius: 24),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(simpleData.label!, style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 2),
-                Text(simpleData.subTitle, style: Theme.of(context).textTheme.labelMedium),
-              ],
-            ),
-          ),
-          if (isSelected) const Icon(Icons.done),
-        ],
-      ),
-    );
-  }
-}
+// class SimpleFormFieldWidgetBuilder implements FormFieldWidgetBuilder {
+//   @override
+//   Widget buildForContent(BuildContext context, FormFieldOption formFieldOption) {
+//     SimpleData simpleData = formFieldOption as SimpleData;
+//     return Row(
+//       children: [
+//         const CircleAvatar(radius: 16),
+//         const SizedBox(width: 12),
+//         Expanded(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(simpleData.label!, style: Theme.of(context).textTheme.bodyMedium),
+//               const SizedBox(height: 2),
+//               Text(simpleData.subTitle, style: Theme.of(context).textTheme.labelMedium),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   @override
+//   Widget buildForList(BuildContext context, FormFieldOption formFieldOption, bool isSelected) {
+//     SimpleData simpleData = formFieldOption as SimpleData;
+//     return Container(
+//       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+//       child: Row(
+//         children: [
+//           const CircleAvatar(radius: 24),
+//           const SizedBox(width: 12),
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(simpleData.label!, style: Theme.of(context).textTheme.bodyMedium),
+//                 const SizedBox(height: 2),
+//                 Text(simpleData.subTitle, style: Theme.of(context).textTheme.labelMedium),
+//               ],
+//             ),
+//           ),
+//           if (isSelected) const Icon(Icons.done),
+//         ],
+//       ),
+//     );
+//   }
+// }

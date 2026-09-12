@@ -9,8 +9,8 @@ class FlRadioButtonFormField<T> extends FormField<T> {
     bool isRequired = false,
     super.validator,
     super.initialValue,
-    required List<FormFieldOption<T>> options,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    required Iterable<T> options,
+    FlContentBuilder<T>? contentBuilder,
     super.autovalidateMode,
     super.onSaved,
     ValueChanged<T?>? onChanged,
@@ -36,25 +36,32 @@ class FlRadioButtonFormField<T> extends FormField<T> {
                },
                groupValue: state.value,
                child: vertical
-                   ? _VerticalWidget(options: options, builder: builder, enabled: enabled)
-                   : _HorizontalWidget(options: options, builder: builder, enabled: enabled),
+                   ? _VerticalWidget(options: options, contentBuilder: contentBuilder ?? defaultFlContentBuilder<T>, enabled: enabled)
+                   : _HorizontalWidget(options: options, contentBuilder: contentBuilder ?? defaultFlContentBuilder<T>, enabled: enabled),
              ),
            );
          },
        );
 
-  static List<Widget> _buildChildren<T>(BuildContext context, List<FormFieldOption<T>> options, FormFieldWidgetBuilder builder, bool enabled) {
-    return options.map((e) {
+  static List<Widget> _buildChildren<T>(BuildContext context, Iterable<T> options, FlContentBuilder<T> contentBuilder, bool enabled) {
+    return options.map((element) {
+      final String optionKey;
+      if (element is FormFieldOption) {
+        final option = element as FormFieldOption;
+        optionKey = option.label ?? option.value.toString();
+      } else {
+        optionKey = element.toString();
+      }
       return InkWell(
         onTap: enabled
             ? () {
-                RadioGroup.maybeOf<T>(context)?.onChanged(e.value);
+                RadioGroup.maybeOf<T>(context)?.onChanged(element);
               }
             : null,
         child: Row(
           children: [
-            Radio<T>(key: e.label != null ? Key(e.label!) : null, value: e.value, enabled: enabled),
-            builder.buildForContent(context, e),
+            Radio<T>(key: Key(optionKey), value: element, enabled: enabled),
+            contentBuilder(context, element),
           ],
         ),
       );
@@ -77,27 +84,27 @@ class FlRadioButtonFormField<T> extends FormField<T> {
 //////////////////////////////////////////////////////////////////////////////
 
 class _VerticalWidget<T> extends StatelessWidget {
-  final List<FormFieldOption<T>> options;
-  final FormFieldWidgetBuilder builder;
+  final Iterable<T> options;
+  final FlContentBuilder<T> contentBuilder;
 
   final bool enabled;
 
-  const _VerticalWidget({super.key, required this.options, required this.builder, this.enabled = true});
+  const _VerticalWidget({super.key, required this.options, required this.contentBuilder, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: FlRadioButtonFormField._buildChildren(context, options, builder, enabled));
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: FlRadioButtonFormField._buildChildren(context, options, contentBuilder, enabled));
   }
 }
 //////////////////////////////////////////////////////////////////////////////
 
 class _HorizontalWidget<T> extends StatelessWidget {
-  final List<FormFieldOption<T>> options;
-  final FormFieldWidgetBuilder builder;
+  final Iterable<T> options;
+  final FlContentBuilder<T> contentBuilder;
 
   final bool enabled;
 
-  const _HorizontalWidget({super.key, required this.options, required this.builder, this.enabled = true});
+  const _HorizontalWidget({super.key, required this.options, required this.contentBuilder, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +113,7 @@ class _HorizontalWidget<T> extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
-        children: FlRadioButtonFormField._buildChildren(context, options, builder, enabled),
+        children: FlRadioButtonFormField._buildChildren(context, options, contentBuilder, enabled),
       ),
     );
   }

@@ -76,4 +76,12 @@ class FlDateFormFieldState extends FormFieldState<DateTime> {
       isFocused = newValue;
     });
   }
+
+  @override
+  void didUpdateWidget(covariant FormField<DateTime> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      setValue(widget.initialValue);
+    }
+  }
 }

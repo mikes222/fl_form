@@ -17,14 +17,7 @@ class _FlRadioButtonFormFieldPageState extends State<FlRadioButtonFormFieldPage>
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           children: [
-            FlRadioButtonFormField(
-              label: 'Select Item',
-              options: [
-                FormFieldOption(value: 'Item 1'),
-                FormFieldOption(value: 'Item 2'),
-                FormFieldOption(value: 'Item 3'),
-              ],
-            ),
+            FlRadioButtonFormField(label: 'Select Item', options: ['Item 1', 'Item 2', 'Item 3']),
             const SizedBox(height: 24),
             FlRadioButtonFormField(
               isRequired: true,
@@ -34,11 +27,7 @@ class _FlRadioButtonFormFieldPageState extends State<FlRadioButtonFormFieldPage>
                 return null;
               },
               label: 'Select Item',
-              options: [
-                FormFieldOption(value: 'Option 1', label: 'Option 1'),
-                FormFieldOption(value: 'Option 2', label: 'Option 2'),
-                FormFieldOption(value: 'Option 3', label: 'Option 3'),
-              ],
+              options: ['Option 1', 'Option 2', 'Option 3'],
             ),
           ],
         ),

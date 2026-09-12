@@ -18,8 +18,9 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
     super.enabled,
     super.initialValue,
     bool isRequired = false,
-    required List<FormFieldOption<T>> options,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    required Iterable<T> options,
+    FlContentBuilder<T>? contentBuilder,
+    FlListBuilder<T>? listBuilder,
     String? helperText,
   }) : super(
          builder: (field) {
@@ -32,7 +33,7 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
              placeholderText: placeholderText,
              onTap: enabled
                  ? () {
-                     MultipleItemPickerBottomSheet.show<T>(state.context, options, state.value, builder).then((value) {
+                     MultipleItemPickerBottomSheet.show<T>(state.context, options.toList(), state.value, listBuilder).then((value) {
                        if (value != null) {
                          state.didChange(value);
                        }
@@ -54,7 +55,7 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
                                      onDelete(v);
                                    }
                                  : null,
-                             label: builder.buildForContent(state.context, options.firstWhere((test) => test.value == v)),
+                             label: contentBuilder != null ? contentBuilder(state.context, v) : defaultFlContentBuilder<T>(state.context, v),
                            ),
                          )
                          .toList(),

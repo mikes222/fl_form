@@ -26,29 +26,37 @@ class FlSwitchFormField extends FormField<bool> {
     String? helperText,
   }) : super(
          builder: (state) {
-           return FlReadonlyField(
-             label: label,
-             isRequired: isRequired,
-             enabled: enabled,
-             hasError: state.hasError,
-             errorText: state.errorText,
-             helperText: helperText,
-             //             autofocus: autofocus,
-             content: Row(
-               children: [
-                 Switch(
-                   padding: EdgeInsets.zero,
-                   value: state.value ?? false,
-                   onChanged: enabled
-                       ? (value) {
-                           state.didChange(value);
-                           onChanged?.call(value);
-                         }
-                       : null,
-                 ),
-               ],
-             ),
-           );
-         },
+          final bool currentValue = state.value ?? false;
+          final bool isEnabled = enabled;
+          void toggle() {
+            final bool newValue = !currentValue;
+            state.didChange(newValue);
+            onChanged?.call(newValue);
+          }
+
+          return FlReadonlyField(
+            label: label,
+            isRequired: isRequired,
+            enabled: isEnabled,
+            hasError: state.hasError,
+            errorText: state.errorText,
+            helperText: helperText,
+            onTap: isEnabled ? toggle : null,
+            content: Row(
+              children: [
+                Switch(
+                  padding: EdgeInsets.zero,
+                  value: currentValue,
+                  onChanged: isEnabled
+                      ? (value) {
+                          state.didChange(value);
+                          onChanged?.call(value);
+                        }
+                      : null,
+                ),
+              ],
+            ),
+          );
+        },
        );
 }

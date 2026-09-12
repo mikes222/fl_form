@@ -54,48 +54,15 @@ class AllFormFieldsPage extends StatelessWidget {
             const SizedBox(height: 24),
             FlDurationFormField(label: 'Duration', placeholderText: 'hh:mm'),
             const SizedBox(height: 24),
-            FlRadioButtonFormField(
-              label: 'Radio Buttons',
-              options: [
-                FormFieldOption(value: 'Option 1'),
-                FormFieldOption(value: 'Option 2'),
-                FormFieldOption(value: 'Option 3'),
-              ],
-            ),
+            FlRadioButtonFormField(label: 'Radio Buttons', options: ['Option 1', 'Option 2', 'Option 3']),
             const SizedBox(height: 24),
-            FlCheckboxGroupFormField(
-              label: 'Checkbox Group',
-              options: [
-                FormFieldOption(value: 'Option 1'),
-                FormFieldOption(value: 'Option 2'),
-                FormFieldOption(value: 'Option 3'),
-              ],
-            ),
+            FlCheckboxGroupFormField(label: 'Checkbox Group', options: ['Option 1', 'Option 2', 'Option 3']),
             const SizedBox(height: 24),
-            FlSegmentedButtonFormField<String>(
-              label: 'Segmented Button',
-              options: const [
-                FormFieldOption(value: 'one', label: 'One'),
-                FormFieldOption(value: 'two', label: 'Two'),
-                FormFieldOption(value: 'three', label: 'Three'),
-              ],
-            ),
+            FlSegmentedButtonFormField<String>(label: 'Segmented Button', options: const ['one', 'two', 'three']),
             const SizedBox(height: 24),
-            SingleItemPickerFormField(
-              label: 'Single Item Picker',
-              options: [
-                FormFieldOption(value: 'Title 1'),
-                FormFieldOption(value: 'Title 2'),
-              ],
-            ),
+            SingleItemPickerFormField(label: 'Single Item Picker', options: ['Title 1', 'Title 2']),
             const SizedBox(height: 24),
-            MultipleItemPickerFormField(
-              label: 'Multiple Item Picker',
-              options: [
-                FormFieldOption(value: 'Title 1'),
-                FormFieldOption(value: 'Title 2'),
-              ],
-            ),
+            MultipleItemPickerFormField(label: 'Multiple Item Picker', options: ['Title 1', 'Title 2']),
             const SizedBox(height: 24),
             FlSearchItemFormField(
               label: 'Search Item Picker',

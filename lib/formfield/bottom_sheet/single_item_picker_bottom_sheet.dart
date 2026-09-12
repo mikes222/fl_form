@@ -4,24 +4,24 @@ import '../form_field_option.dart';
 
 class SingleItemPickerBottomSheet<T> extends StatelessWidget {
   ///List options of picker
-  final List<FormFieldOption<T>> options;
+  final List<T> options;
 
   ///current option selected of picker
   final T? currentOption;
 
-  final FormFieldWidgetBuilder builder;
+  final FlListBuilder<T>? listBuilder;
 
-  static Future<T?> show<T>(BuildContext context, List<FormFieldOption<T>> options, T? currentOption, FormFieldWidgetBuilder builder) {
+  static Future<T?> show<T>(BuildContext context, List<T> options, T? currentOption, FlListBuilder<T>? listBuilder) {
     return showModalBottomSheet<T>(
       context: context,
       showDragHandle: true,
       builder: (context) {
-        return SingleItemPickerBottomSheet<T>(options: options, currentOption: currentOption, builder: builder);
+        return SingleItemPickerBottomSheet<T>(options: options, currentOption: currentOption, listBuilder: listBuilder);
       },
     );
   }
 
-  const SingleItemPickerBottomSheet({super.key, required this.options, required this.currentOption, required this.builder});
+  const SingleItemPickerBottomSheet({super.key, required this.options, required this.currentOption, this.listBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,11 @@ class SingleItemPickerBottomSheet<T> extends StatelessWidget {
           onTap: options[index] == currentOption
               ? null
               : () {
-                  Navigator.pop(context, options[index].value);
+                  Navigator.pop(context, options[index]);
                 },
-          child: builder.buildForList(context, options[index], options[index].value == currentOption),
+          child: listBuilder != null
+              ? listBuilder!(context, options[index], options[index] == currentOption)
+              : defaultFlListBuilder<T>(context, options[index], options[index] == currentOption),
         );
       },
     );

@@ -9,8 +9,8 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
     bool isRequired = false,
     super.validator,
     super.initialValue,
-    required List<FormFieldOption<T>> options,
-    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    required Iterable<T> options,
+    FlContentBuilder<T>? contentBuilder,
     super.autovalidateMode,
     super.onSaved,
     super.restorationId,
@@ -28,17 +28,17 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
              errorText: state.errorText,
              content: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
-               children: options.map((e) {
+               children: options.map((element) {
                  return Row(
                    children: [
                      Checkbox(
-                       key: e.label != null ? Key(e.label!) : null,
-                       value: state.value?.contains(e.value) == true,
+                       key: Key(element.toString()),
+                       value: state.value?.contains(element) == true,
                        onChanged: (value) {
                          if (value == true) {
-                           state.didChange([...state.value ?? [], e.value]);
+                           state.didChange([...state.value ?? [], element]);
                          } else {
-                           state.didChange([...state.value!]..remove(e.value));
+                           state.didChange([...state.value!]..remove(element));
                          }
                        },
                      ),
@@ -46,13 +46,13 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                      Expanded(
                        child: InkWell(
                          onTap: () {
-                           if (state.value?.contains(e.value) == true) {
-                             state.didChange([...state.value!]..remove(e.value));
+                           if (state.value?.contains(element) == true) {
+                             state.didChange([...state.value!]..remove(element));
                            } else {
-                             state.didChange([...state.value ?? [], e.value]);
+                             state.didChange([...state.value ?? [], element]);
                            }
                          },
-                         child: builder.buildForContent(state.context, e),
+                         child: contentBuilder != null ? contentBuilder(state.context, element) : defaultFlContentBuilder<T>(state.context, element),
                        ),
                      ),
                    ],

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../group_demo_widget.dart';
 
 class TextFormFieldPage extends StatelessWidget {
-  const TextFormFieldPage({Key? key}) : super(key: key);
+  const TextFormFieldPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,8 @@ class TextFormFieldPage extends StatelessWidget {
             GroupDemoWidget(
               title: 'Simple',
               children: [
-                FlTextFormField(
-                  label: 'Name',
-                  placeholderText: 'Type your name',
-                ),
-                FlTextFormField(
-                  label: 'Password',
-                  placeholderText: '* * * * * *',
-                  isRequired: true,
-                  isPassword: true,
-                ),
+                FlTextFormField(label: 'Name', placeholderText: 'Type your name'),
+                FlTextFormField(label: 'Password', placeholderText: '* * * * * *', isRequired: true, isPassword: true),
                 FlTextFormField(
                   label: 'Email',
                   isRequired: true,
@@ -37,24 +29,12 @@ class TextFormFieldPage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 32,
-            ),
+            const SizedBox(height: 32),
             GroupDemoWidget(
               title: 'FormFiel Icon',
               children: [
-                FlTextFormField(
-                  prefixIcon: const Icon(Icons.person),
-                  label: 'Name',
-                  placeholderText: 'Type your name',
-                ),
-                FlTextFormField(
-                  prefixIcon: const Icon(Icons.lock),
-                  label: 'Password',
-                  placeholderText: '* * * * * *',
-                  isRequired: true,
-                  isPassword: true,
-                ),
+                FlTextFormField(prefixIcon: const Icon(Icons.person), label: 'Name', placeholderText: 'Type your name'),
+                FlTextFormField(prefixIcon: const Icon(Icons.lock), label: 'Password', placeholderText: '* * * * * *', isRequired: true, isPassword: true),
                 FlTextFormField(
                   prefixIcon: const Icon(Icons.email),
                   label: 'Email',
@@ -67,17 +47,11 @@ class TextFormFieldPage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 32,
-            ),
+            const SizedBox(height: 32),
             GroupDemoWidget(
               title: 'FormFiel Icon',
               children: [
-                FlTextFormField(
-                  maxLines: 4,
-                  label: 'Description',
-                  placeholderText: 'Type your description',
-                ),
+                FlTextFormField(maxLines: 4, label: 'Description', placeholderText: 'Type your description'),
                 FlTextFormField(
                   maxLines: 4,
                   label: 'Description',
@@ -89,9 +63,7 @@ class TextFormFieldPage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 32,
-            ),
+            const SizedBox(height: 32),
           ],
         ),
       ),

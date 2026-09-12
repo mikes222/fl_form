@@ -1,4 +1,3 @@
-import 'package:fl_form/formfield/fl_form_field_theme.dart';
 import 'package:flutter/material.dart';
 
 class LabelWidget extends StatelessWidget {
@@ -10,17 +9,20 @@ class LabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final baseStyle = theme.textTheme.bodySmall;
+    final defaultStyle = baseStyle?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final style = theme.inputDecorationTheme.floatingLabelStyle ?? defaultStyle;
+
     return RichText(
       text: TextSpan(
-        style: Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle ?? Theme.of(context).inputDecorationTheme.floatingLabelStyle,
+        style: style,
         children: [
           TextSpan(text: label),
           if (isRequired)
             TextSpan(
               text: ' *',
-              style:
-                  Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red) ??
-                  Theme.of(context).inputDecorationTheme.floatingLabelStyle?.copyWith(color: Colors.red),
+              style: style?.copyWith(color: Colors.red),
             ),
         ],
       ),
